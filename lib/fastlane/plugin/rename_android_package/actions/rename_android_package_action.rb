@@ -24,7 +24,7 @@ module Fastlane
         sed = "sed -i "  #linux sed  https://stackoverflow.com/questions/43171648/sed-gives-sed-cant-read-no-such-file-or-directory
         if FastlaneCore::Helper.mac?
           sed = "sed -i '' " # mac sed 
-        do
+        end
     
         Bundler.with_clean_env do
           sh "find #{path}/app/src -name '*.java' -type f -exec #{sed} 's/#{package_name}/#{new_package_name}/' {} \\;"
