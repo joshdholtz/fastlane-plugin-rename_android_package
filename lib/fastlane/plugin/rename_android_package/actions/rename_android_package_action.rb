@@ -19,11 +19,17 @@ module Fastlane
         java_sources.each do |file|
           FileUtils.mv file, new_folder_path
         end
-
+        
+     
+        sed = "sed -i "  #linux sed  https://stackoverflow.com/questions/43171648/sed-gives-sed-cant-read-no-such-file-or-directory
+        if FastlaneCore::Helper.mac?
+          sed = "sed -i '' " # mac sed 
+        do
+    
         Bundler.with_clean_env do
-          sh "find #{path}/app/src -name '*.java' -type f -exec sed -i '' 's/#{package_name}/#{new_package_name}/' {} \\;"
-          sh "find #{path}/app/src -name 'AndroidManifest.xml' -type f -exec sed -i '' 's/#{package_name}/#{new_package_name}/' {} \\;"
-          sh "find #{path}/app -name 'build.gradle' -type f -exec sed -i '' 's/#{package_name}/#{new_package_name}/' {} \\;"
+          sh "find #{path}/app/src -name '*.java' -type f -exec #{sed} 's/#{package_name}/#{new_package_name}/' {} \\;"
+          sh "find #{path}/app/src -name 'AndroidManifest.xml' -type f -exec #{sed} 's/#{package_name}/#{new_package_name}/' {} \\;"
+          sh "find #{path}/app -name 'build.gradle' -type f -exec #{sed} 's/#{package_name}/#{new_package_name}/' {} \\;"
         end
       end
 
