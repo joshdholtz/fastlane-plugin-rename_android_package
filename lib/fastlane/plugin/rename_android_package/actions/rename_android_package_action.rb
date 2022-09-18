@@ -9,18 +9,22 @@ module Fastlane
         package_name = params[:package_name]
         new_package_name = params[:new_package_name]
 
-        folder = package_name.gsub('.', '/')
-        new_folder = new_package_name.gsub('.', '/')
-        new_folder_path = "#{path}/app/src/main/java/#{new_folder}"
+        if package_name != new_package_name
+        
+          folder = package_name.gsub('.', '/')
+          new_folder = new_package_name.gsub('.', '/')
+          new_folder_path = "#{path}/app/src/main/java/#{new_folder}"
 
-        FileUtils.mkdir_p(new_folder_path)
-        FileUtils.mv Dir.glob("#{path}/app/src/main/java/#{folder}/*"), new_folder_path
+          FileUtils.mkdir_p(new_folder_path)
+          FileUtils.mv Dir.glob("#{path}/app/src/main/java/#{folder}/*"), new_folder_path
 
-        Bundler.with_unbundled_env do
-          sh "find #{path}/app/src -name '*.java' -type f -exec sed -i '' 's/#{package_name}/#{new_package_name}/' {} \\;"
-          sh "find #{path}/app/src -name 'AndroidManifest.xml' -type f -exec sed -i '' 's/#{package_name}/#{new_package_name}/' {} \\;"
-          sh "find #{path}/app -name 'build.gradle' -type f -exec sed -i '' 's/#{package_name}/#{new_package_name}/' {} \\;"
+          Bundler.with_unbundled_env do
+            sh "find #{path}/app/src -name '*.java' -type f -exec sed -i '' 's/#{package_name}/#{new_package_name}/' {} \\;"
+            sh "find #{path}/app/src -name 'AndroidManifest.xml' -type f -exec sed -i '' 's/#{package_name}/#{new_package_name}/' {} \\;"
+            sh "find #{path}/app -name 'build.gradle' -type f -exec sed -i '' 's/#{package_name}/#{new_package_name}/' {} \\;"
+          end
         end
+       UI.message "Old and new package names match, nothing to do, exiting"
       end
 
       def self.description
