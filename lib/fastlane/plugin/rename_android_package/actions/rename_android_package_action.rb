@@ -23,8 +23,9 @@ module Fastlane
             sh "find #{path}/app/src -name 'AndroidManifest.xml' -type f -exec sed -i '' 's/#{package_name}/#{new_package_name}/' {} \\;"
             sh "find #{path}/app -name 'build.gradle' -type f -exec sed -i '' 's/#{package_name}/#{new_package_name}/' {} \\;"
           end
+        else
+          UI.message "Old and new package names match, nothing to do, exiting"
         end
-       UI.message "Old and new package names match, nothing to do, exiting"
       end
 
       def self.description
