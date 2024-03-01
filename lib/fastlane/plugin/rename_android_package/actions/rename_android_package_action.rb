@@ -20,8 +20,14 @@ module Fastlane
           FileUtils.mv file, new_folder_path
         end
 
+        kotlin_sources = Dir.glob("#{path}/app/src/main/java/#{folder}/*.kt")
+        kotlin_sources.each do |file|
+          FileUtils.mv file, new_folder_path
+        end
+
         Bundler.with_clean_env do
           sh "find #{path}/app/src -name '*.java' -type f -exec sed -i '' 's/#{package_name}/#{new_package_name}/' {} \\;"
+          sh "find #{path}/app/src -name '*.kt' -type f -exec sed -i '' 's/#{package_name}/#{new_package_name}/' {} \\;"
           sh "find #{path}/app/src -name 'AndroidManifest.xml' -type f -exec sed -i '' 's/#{package_name}/#{new_package_name}/' {} \\;"
           sh "find #{path}/app -name 'build.gradle' -type f -exec sed -i '' 's/#{package_name}/#{new_package_name}/' {} \\;"
         end
